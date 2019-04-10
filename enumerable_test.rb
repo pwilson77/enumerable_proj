@@ -18,7 +18,7 @@ module Enumerable
 
   def my_select
     accepted = []
-    self.my_each { |x| arr << x if yield(x)}
+    self.my_each { |x| accepted << x if yield(x)}
     accepted
   end 
   
@@ -33,7 +33,8 @@ module Enumerable
   end
 
   def my_none?
-    self.my_all? {|x| !yield(x)}
+    self.my_each {|x| return false if yield(x)}
+    true
   end
 
   def my_count?
@@ -46,13 +47,13 @@ module Enumerable
   def my_map(&prock)
     new_array = []
     self.my_each {|x| 
-    new_array << yield(x) if prock.empty? 
-    new_array << prock.call(x)
+    new_array << prock.call(x) if (prock != nil && block_given?) || prock != nil 
+    new_array << yield(x)  if prock.nil? && block_given?
     }
     new_array
   end
 
-  def my_inject(val = 1)
+  def my_inject(val = 0)
     for i in self
       val = yield(val, i)
     end
@@ -62,8 +63,9 @@ module Enumerable
 end
 
 def multiple_els(arr)
-  arr.my_inject {|currentTotal, nextMultiple| currentTotal * nextMultiple }
+  arr.my_inject(1) {|currentTotal, nextMultiple| currentTotal * nextMultiple }
 end
+
 
 arr = [2,4,6,7]
 
