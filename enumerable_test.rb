@@ -47,7 +47,7 @@ module Enumerable
   def my_map(&prock)
     new_array = []
     self.my_each {|x| 
-    new_array << prock.call(x) if (prock != nil && block_given?) || prock != nil 
+    new_array << prock.call(x) if  prock != nil 
     new_array << yield(x)  if prock.nil? && block_given?
     }
     new_array
